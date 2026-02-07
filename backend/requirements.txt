@@ -1,0 +1,3 @@
+firebase-admin
+PyMuPDF
+google-cloud-storage
