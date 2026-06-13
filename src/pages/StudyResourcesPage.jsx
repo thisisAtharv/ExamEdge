@@ -31,7 +31,7 @@ const SUBJECTS_DATA = {
     ]
   },
   "Electronic Science": { icon: <Cpu size={32} className="text-purple-600" />, subsections: ["Communication System", "Digital Electronics- I", "Digital Electronics-II", "C & C++ Programming", "Electrodynamics & Microwaves", "Microprocessors & Microcontrollers", "Optoelectronics", "Power Electronics", "VHDL and Verilog- Testing and Verification"] },
-  "test_automation": { icon: <Book size={32} className="text-purple-600" />, subsections: [] }
+  "Automated Library": { icon: <Book size={32} className="text-purple-600" />, subsections: [] }
 };
 
 function formatResourceTitle(title) {
@@ -56,7 +56,7 @@ function StudyResourcesPage() {
   }, []);
 
   const testAutomationPdfCount = useMemo(() => {
-    return localResources.filter(r => r.subject === "test_automation").length;
+    return localResources.filter(r => r.subject === "Automated Library").length;
   }, []);
 
   const extractTextFromPDF = async (url) => {
@@ -123,8 +123,8 @@ function StudyResourcesPage() {
   };
 
   const handleSubjectClick = (subject) => {
-    if (subject === "test_automation") {
-      setSelectedSubject("test_automation");
+    if (subject === "Automated Library") {
+      setSelectedSubject("Automated Library");
       setSelectedTopic("General"); // Auto-select the "General" topic
     } else {
       setSelectedSubject(subject);
@@ -135,7 +135,7 @@ function StudyResourcesPage() {
     if (selectedTopic) {
       setSelectedTopic(null);
       // If we are backing out of the special automation subject, go all the way home
-      if (selectedSubject === "test_automation") {
+      if (selectedSubject === "Automated Library") {
         setSelectedSubject(null);
       }
     } else if (selectedSubject) {
@@ -150,7 +150,7 @@ function StudyResourcesPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {Object.entries(SUBJECTS_DATA).map(([subject, data]) => {
           // --- FIX for "0 topics" ---
-          const isTestAutomation = subject === "test_automation";
+          const isTestAutomation = subject === "Automated Library";
           const count = isTestAutomation ? testAutomationPdfCount : data.subsections.length;
           const label = isTestAutomation ? (count === 1 ? "PDF" : "PDFs") : (count === 1 ? "topic" : "topics");
 
