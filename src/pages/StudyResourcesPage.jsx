@@ -31,7 +31,7 @@ const SUBJECTS_DATA = {
     ]
   },
   "Electronic Science": { icon: <Cpu size={32} className="text-purple-600" />, subsections: ["Communication System", "Digital Electronics- I", "Digital Electronics-II", "C & C++ Programming", "Electrodynamics & Microwaves", "Microprocessors & Microcontrollers", "Optoelectronics", "Power Electronics", "VHDL and Verilog- Testing and Verification"] },
-  "Automated Library": { icon: <Book size={32} className="text-purple-600" />, subsections: [] }
+  "test_automation": { icon: <Book size={32} className="text-purple-600" />, subsections: [] }
 };
 
 function formatResourceTitle(title) {
@@ -56,12 +56,17 @@ function StudyResourcesPage() {
   }, []);
 
   const testAutomationPdfCount = useMemo(() => {
-    return localResources.filter(r => r.subject === "Automated Library").length;
+    return localResources.filter(r => r.subject === "test_automation").length;
   }, []);
 
   const extractTextFromPDF = async (url) => {
     try {
-      const pdf = await pdfjsLib.getDocument(url).promise;
+      // Fetch PDF as ArrayBuffer to handle cross-origin Hugging Face URLs
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Failed to fetch PDF: ${response.status}`);
+      const data = await response.arrayBuffer();
+
+      const pdf = await pdfjsLib.getDocument({ data }).promise;
       let fullText = '';
       for (let pageNum = 3; pageNum <= pdf.numPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
@@ -73,7 +78,7 @@ function StudyResourcesPage() {
       return cleanedText;
     } catch (error) {
       console.error("Error extracting text from PDF:", error);
-      alert("Could not read the PDF file.");
+      alert("Could not read the PDF file. The file may not be accessible for text extraction.");
       return null;
     }
   };
@@ -118,8 +123,8 @@ function StudyResourcesPage() {
   };
 
   const handleSubjectClick = (subject) => {
-    if (subject === "Automated Library") {
-      setSelectedSubject("Automated Library");
+    if (subject === "test_automation") {
+      setSelectedSubject("test_automation");
       setSelectedTopic("General"); // Auto-select the "General" topic
     } else {
       setSelectedSubject(subject);
@@ -130,7 +135,7 @@ function StudyResourcesPage() {
     if (selectedTopic) {
       setSelectedTopic(null);
       // If we are backing out of the special automation subject, go all the way home
-      if (selectedSubject === "Automated Library") {
+      if (selectedSubject === "test_automation") {
         setSelectedSubject(null);
       }
     } else if (selectedSubject) {
@@ -145,7 +150,7 @@ function StudyResourcesPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {Object.entries(SUBJECTS_DATA).map(([subject, data]) => {
           // --- FIX for "0 topics" ---
-          const isTestAutomation = subject === "Automated Library";
+          const isTestAutomation = subject === "test_automation";
           const count = isTestAutomation ? testAutomationPdfCount : data.subsections.length;
           const label = isTestAutomation ? (count === 1 ? "PDF" : "PDFs") : (count === 1 ? "topic" : "topics");
 

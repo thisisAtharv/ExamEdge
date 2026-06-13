@@ -4,7 +4,7 @@ import random
 import re
 
 # --- CONFIGURATION ---
-BASE_DIR = r"C:\MERN_B1\examedge\exam-edge"
+BASE_DIR = r"C:\MERN\examedge\exam-edge"
 PUBLIC_DIR = os.path.join(BASE_DIR, 'public')
 RESOURCES_FOLDER = os.path.join(PUBLIC_DIR, 'resources')
 OUTPUT_FILE = os.path.join(BASE_DIR, 'src', 'data', 'resources.json')
